@@ -1,0 +1,131 @@
+
+------------------------	-------		-------- Docker --------	--------	--------------------------------------------
+
+
+>Official site: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+---- Installation -----
+
+	1.Update the apt package index:
+		--> sudo apt-get update
+
+	2.Install packages to allow apt to use a repository over HTTPS:
+		--> sudo apt-get install \
+		    apt-transport-https \
+		    ca-certificates \
+		    curl \
+		    software-properties-common
+
+	3.Add Docker’s official GPG key:
+		--> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+	4.Verify that you now have the key:
+		--> sudo apt-key fingerprint 0EBFCD88
+
+	5.Use the following command to set up the stable repository:
+		--> sudo add-apt-repository \
+		   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+		   $(lsb_release -cs) \
+		   stable"
+
+	6.Install the latest version of Docker CE, or go to the next step to install a specific version:
+		--> sudo apt-get install docker-ce
+
+---- Uninstallation ----
+
+	1.Uninstall the Docker CE package:
+		--> sudo apt-get purge docker-ce
+
+	2.Images, containers, volumes, or customized configuration files on your host are not automatically removed. To delete all images, 		containers, and volumes:
+		--> sudo rm -rf /var/lib/docker
+
+---- Other commands ----
+
+	Check version:
+	--> docker -v
+
+	-- Container --
+		Start container:
+		--> docker run -d -p 8080:8080 --name container_name image_name 
+
+		Stop/Restart/Remove container:
+		--> docker stop/restart/rm container_id/name
+
+		if container is already up:
+		--> docker stop/rm -f container_id/name
+
+		List running containers:
+		--> docker ps
+
+		List exited containers:
+		--> docker ps -a
+
+		Inspect container:
+		--> docker exec -it container_id/name bash
+
+		Check docker logs
+		--> docker logs container_id/name
+
+		Remove all stopped/exited containers:
+		--> docker container prune
+
+	-- Image --
+		Pull image
+		--> docker image pull image_name
+
+		Remove image
+		--> docker rmi image_name/id(-f : force remove)
+
+		List images:
+		--> docker images
+
+		Inspect image:
+		--> docker inspect image_name/id	
+	
+	-- Network --
+		List docker networks:
+		--> docker network ls
+
+		Create network:
+		--> docker network create -d bridge/overlay network_name
+
+		Connect container to a network on start:
+		--> docker run -itd --network=network_name container_name
+
+		Connect a running container to a network:
+		--> docker network connect network_name container_name
+
+		Link two containers:
+		--> docker network connect --link container1 network_name container2
+
+		Disconnect conatiner from using a network:
+		--> docker network disconnect  network_name container_name
+
+		Inspect network:
+		--> docker network inspect network_name
+
+		Remove network:
+		--> docker rm  network_name   
+
+
+	Remove:
+	- all stopped containers
+	- all networks not used by at least one container
+	- all dangling images
+	- all build cache
+	--> docker system prune
+
+---- Dockerfile ----
+
+Build
+--> docker build -t image_name .(if in same directory as Dockerfile)
+
+Dockerfile:
+	FROM openjdk
+	EXPOSE 8080
+	ADD target/SearchService-0.0.1-SNAPSHOT.jar target/search.jar
+	RUN sh -c 'touch target/search.jar'
+	ENTRYPOINT ["java", "-jar","target/search.jar"]
+
+docker-compose.yml
+
